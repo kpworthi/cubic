@@ -24,7 +24,7 @@ Current implementation includes only a completely random AI: random card choice,
 - add ai
 
 **To-Do**
-2. disable options while game is in progress
-3. touch
-4. add additional AI settings
-5. add mp?
+1. disable options while game is in progress
+2. touch
+3. add additional AI settings
+4. add mp?
