@@ -1,13 +1,13 @@
 import {COLORS, GRID_POS, HAND_GRID, GRIDS, DECK_ONE, DECK_TWO, TEST_KEYS} from 'https://assets.codepen.io/4668860/initConstants.js';
 // These are constants for various functions throughout the app
 
-import {CuibcCard} from 'https://assets.codepen.io/4668860/card-class.js';
+import {CubicCard} from 'https://assets.codepen.io/4668860/card-class.js';
 // Card needs a ("card name", Number(cell in grid), Element(grid its being placed into), [value array]) 
 // for its constructor, when being used for cubic.
 
 'use strict';
   
-customElements.define('grid-card', Card, { extends: "div" });
+customElements.define('grid-card', CubicCard, { extends: "div" });
   
 class Main extends React.Component{
     constructor(props){
@@ -20,7 +20,8 @@ class Main extends React.Component{
           deckNum: 10,
           turn: "",
           full: false,
-          dealt: false
+          dealt: false,
+          aiType: "random"
       }
       this.deck = DECK_ONE;
       this.deckList = [...Object.keys(DECK_ONE)].concat([...Object.keys(DECK_ONE)]);
@@ -31,6 +32,21 @@ class Main extends React.Component{
       this.cardMouseDown = this.cardMouseDown.bind(this);
       this.cardMouseUp = this.cardMouseUp.bind(this);
       this.cardMoving = this.cardMoving.bind(this);
+      this.placeCard = this.placeCard.bind(this);
+    }
+
+    aiPlayer(){
+        let cardsOnBoard = Array.from(document.querySelector("#main-box").querySelectorAll(".card")),
+            myCards = Array.from(document.querySelector("#right-hand").querySelectorAll(".card")),
+            oppCards = Array.from(document.querySelector("#left-hand").querySelectorAll(".card"));
+        let nextPlay = gameAI(this.state.aiType,
+                              cardsOnBoard, myCards, oppCards);
+        nextPlay[0].style.transition = nextPlay[0].style.transition + ", top 0.5s, left 0.5s";
+        nextPlay[0].style.left = `${GRID_POS[nextPlay[1]][0]-38-
+                                            (nextPlay[0].getBoundingClientRect().left-
+                                            document.querySelector("#main-box").getBoundingClientRect().left)}px`;
+        nextPlay[0].style.top = `${GRID_POS[nextPlay[1]][1]-45}px`;
+        setTimeout(()=>{this.placeCard(nextPlay[0], nextPlay[1])},750);
     }
 
     cardBattle(placedCard, cardList, chn = false, adv = true){
@@ -223,52 +239,7 @@ class Main extends React.Component{
                         conflictingCard.style.border = `1px solid black`;                
                 //otherwise move the card, appending it to the board as necessary
                 }else{
-                    if (theCard.parentElement !== theBoard)
-                        theBoard.appendChild(theCard.parentElement.removeChild(theCard));
-                    theCard.style.left = `${GRID_POS[index][0]-45}px`;
-                    theCard.style.top = `${GRID_POS[index][1]-45}px`;
-                    theCard.style.zIndex = 1;
-                    theCard.currentCell = index;
-                    theCard.style.backgroundColor = (theCard.style.backgroundColor==="blue")?"blue":"red";
-                    if(document.querySelector("#sound-check").checked){
-                        document.querySelector("#card-down-one").currentTime = 0;
-                        document.querySelector("#card-down-one").play();
-                    }
-    
-                    //perform card battle if adjacent to any enemy cards
-                    this.cardBattle(theCard, cardList);
-                    
-                    //check if board is full
-                    if(document.querySelectorAll("#main-box > .card").length === 9){
-                        //if so wait for any last flips, count number of cards of each color
-                        setTimeout(()=>{
-                            let blueCards = 0, redCards = 0;
-                            document.querySelectorAll("#main-box > .card").forEach(x => {
-                                if(x.player === "blue")
-                                    blueCards++;
-                            });
-                            redCards = 9-blueCards;
-                            if(redCards > blueCards){
-                                this.setState({
-                                    turn: "Red wins!"
-                                });
-                            }
-                            else{
-                                this.setState({
-                                    turn: "Blue wins!"
-                                });
-                            }
-                        }, 650);
-                    }
-                    //otherwise, set the next turn state
-                    else{
-                        setTimeout(()=>{
-                            this.setState({
-                                turn: (this.state.turn==="red")?"blue":"red"
-                            });
-                        }, 500);
-                    }
-    
+                    this.placeCard(theCard,index);
                 }
             }
     }
@@ -348,6 +319,70 @@ class Main extends React.Component{
     cubicStart() {
     }
 
+    placeCard(playedCard, placedLoc){
+        let theCard = playedCard;
+        let theBoard = document.querySelector("#main-box");
+        let cardList = [];
+        document.querySelector("#main-box").querySelectorAll(".card").forEach((x)=>{
+            if(x !== theCard)
+                cardList.push(x);
+        });
+        let index = placedLoc;
+
+        if (theCard.parentElement !== theBoard)
+            theBoard.appendChild(theCard.parentElement.removeChild(theCard));
+
+        theCard.style.left = `${GRID_POS[index][0]-45}px`;
+        theCard.style.top = `${GRID_POS[index][1]-45}px`;
+        theCard.style.zIndex = 1;
+        theCard.currentCell = index;
+        theCard.style.backgroundColor = (theCard.style.backgroundColor==="blue")?"blue":"red";
+
+        if(document.querySelector("#sound-check").checked){
+            document.querySelector("#card-down-one").currentTime = 0;
+            document.querySelector("#card-down-one").play();
+        }
+
+        //perform card battle if adjacent to any enemy cards
+        this.cardBattle(theCard, cardList);
+        
+        //check if board is full
+        if(document.querySelectorAll("#main-box > .card").length === 9){
+            //if so wait for any last flips, count number of cards of each color
+            setTimeout(()=>{
+                let blueCards = 0, redCards = 0;
+                document.querySelectorAll("#main-box > .card").forEach(x => {
+                    if(x.player === "blue")
+                        blueCards++;
+                });
+                redCards = 9-blueCards;
+                if(redCards > blueCards){
+                    this.setState({
+                        turn: "Red wins!"
+                    });
+                }
+                else{
+                    this.setState({
+                        turn: "Blue wins!"
+                    });
+                }
+            }, 650);
+        }
+        //otherwise, set the next turn state
+        else{
+            setTimeout(()=>{
+                this.setState({
+                    turn: (this.state.turn==="red")?"blue":"red"
+                },()=>{
+                        //run AI if needed
+                        if(this.state.turn==="red" && document.querySelector("#ai-button").textContent === `"Random" AI`)
+                            setTimeout(()=>{this.aiPlayer()}, 900);
+                    });
+            }, 500);
+        }
+
+    }
+
     startButton(){
       let deckList = [...Object.keys(DECK_ONE)].concat([...Object.keys(DECK_ONE)]);
       if(this.state.dealt === false){
@@ -390,7 +425,9 @@ class Main extends React.Component{
         this.setState({
             dealt: true,
             turn: Math.round(Math.random())===0?"blue":"red"
-        });
+        },()=>{if (this.state.turn === "red" && document.querySelector("#ai-button").textContent === `"Random" AI`) 
+                    setTimeout(()=>{this.aiPlayer()},500);
+                });
       }
       else{
           for(let each of document.querySelectorAll(".card")){
@@ -427,9 +464,6 @@ class Main extends React.Component{
       return(
       <div id="super-container">
         <div id="outer-box">
-          <div id="chooser">
-              {/*stuff about choosing a game? tic-tac-toe or cubic?*/}
-          </div>
           <div id="title-bar">
               <h1 style={{textAlign: "center"}}>{this.state.game}</h1>
           </div>
@@ -491,6 +525,10 @@ Chain: If an opposing card is flipped as the result of a 'match' or 'sum', that 
         event.currentTarget.textContent = event.currentTarget.textContent==="Low Level Deck"?"Mid Level Deck":"Low Level Deck";
     }
 
+    aiClick(event){
+        event.currentTarget.textContent = event.currentTarget.textContent==="No AI"?'"Random" AI':"No AI";
+    }
+
     tabClick(event){
         console.log(event.currentTarget.id);
         if(event.currentTarget.id !== this.tab){
@@ -538,6 +576,7 @@ Chain: If an opposing card is flipped as the result of a 'match' or 'sum', that 
                         <label>Sound<input type="checkbox" name="sound-check" id="sound-check"/></label>
                         <button type="button" name="swap" id="swap-deck-button" onClick={this.swapClick}>Low Level Deck</button>
                         <button type="button" name="shuffle" id="shuffle-deck-button" onClick={this.shuffleClick}>Deck Unshuffled</button>
+                        <button type="button" name="ai" id="ai-button" onClick={this.aiClick}>No AI</button>
                       </form>
                     </div>
                 </div>
@@ -553,6 +592,39 @@ Chain: If an opposing card is flipped as the result of a 'match' or 'sum', that 
 
 ReactDOM.render(<Main />, document.querySelector("#origin"))
 
+// the function gameAI returns a card from their hand, and where to play it.
+// it accepts the ai-type to run, the current cards on the board and the current cards in-hand
+// for both players.
+// the actual movement of the card played will be handled in another function.
+//"getGrid" function return a 1-dimensional array, may modify to 2d later.
+
+function gameAI (aiType, cardsOnBoard, myCards, oppCards) {
+    function getGrid(){
+        let board = new Array(9);
+        board = board.fill(" ").map((x,y)=>y);
+        for(let card of cardsOnBoard){
+            board[card.currentCell] = card;
+        }
+        return board;
+    }
+    function getRandomCard(){
+        return (myCards[Math.floor(Math.random()*myCards.length)]);
+    }
+    function randomAI(){
+        let validSpaces = getGrid().filter((cell)=>(typeof cell)==="number");
+        let cardToPlay = getRandomCard();
+        let randomSpace = Math.floor(Math.random()*validSpaces.length)
+        
+        return ([cardToPlay, validSpaces[randomSpace]]);
+
+    }
+
+    switch(aiType){
+        case 'random':
+            return randomAI();
+    }
+}
+
 /*
 to do:
 
@@ -562,14 +634,16 @@ to do:
 --add turns--
 --add victory condition--
 --added imports for constants and the custom card element--
+--options like shuffle, reset deck, sound on/off--
+--add ai--
 
---options like shuffle, reset deck, sound on/off
---touch 
+--disable options while game is in progress
+--touch
+--add mp?
+
 
 --refactor card placement from aligning to cell center, to cell edges
   -this will allow easy swapping between a grid based alignment and
    an edge based alignment, for future use in a free-form tile application
---add tic-tac-toe via cards?
---button for switching between tic-tac-toe / cubic
 
 */

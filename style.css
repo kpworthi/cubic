@@ -1,192 +1,201 @@
 * {
-  -moz-user-select: -moz-none;
-  -khtml-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
 }
 
 html {
-  background-color: lightgreen;
-  background: linear-gradient(rgba(219, 196, 161, 0.4), rgba(219, 196, 161, 0.4)), url(https://assets.codepen.io/4668860/Table+1920x1080.jpg);
-  background-size: cover;
-  background-repeat: no-repeat;
-  width: 100%;
-  height: 100%;
-  font-family: fantasy;
-  display: flex;
-  position: relative;
-  justify-content: center;
-  margin: 0;
+    background-color: lightgreen;
+    background: linear-gradient(rgba(219, 196, 161,0.4), rgba(219, 196, 161,0.4)), url(https://assets.codepen.io/4668860/Table+1920x1080.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+    font-family: sans-serif;
+    display: flex;
+    position: relative;
+    justify-content: center;
+    margin: 0;
 }
 
 #super-container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-#title-bar {
-  width: 100px;
-}
-#title-bar h1 {
-  border-radius: 10px;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.7));
+#title-bar{
+    width: 100px;
+    
+    h1{
+        border-radius: 10px;
+        background-image: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.7));        
+    }
+
 }
 
 #game-area {
-  top: 80px;
-  display: flex;
-  padding: 10px;
-  height: 515px;
-  justify-content: space-between;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1)), url(https://assets.codepen.io/4668860/canvas-bg.jpg?format=auto);
-  background-size: cover;
-  border-radius: 20px;
-  border: 5px dotted black;
+    top: 80px;
+    display: flex;
+    padding: 10px;
+    height: 515px;
+    justify-content: space-between;
+    background-image: linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.1)), 
+        url(https://assets.codepen.io/4668860/canvas-bg.jpg?format=auto);
+    background-size: cover;
+    border-radius: 20px;
+    border: 5px dotted black;
+    @media (min-width: 600px) {   
+
+    }
 }
 
 #main-box {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  padding: 5px;
-  width: 310px;
-  height: 310px;
-  border: 2px solid black;
-  border-radius: 5px;
-  z-index: 0;
-}
-#main-box #game-info {
-  position: relative;
-  top: 295px;
-  text-align: center;
-}
-#main-box #game-info h2 {
-  margin-bottom: 2px;
-}
-#main-box #game-info #start-button {
-  height: 35px;
-  width: 150px;
-  font-size: 20px;
-  border-radius: 10px;
-  background: rgba(133, 133, 0, 0.5);
-}
-#main-box #game-info #game-info-tabs {
-  margin-top: 5px;
-}
-#main-box #game-info #game-info-tabs button {
-  width: 33%;
-  margin: 0;
-  font-size: 18px;
-  background-color: lightgray;
-}
-#main-box #game-info #game-info-tab-box {
-  width: 400px;
-  border: 1px solid black;
-  background-color: rgba(255, 255, 255, 0.3);
-  height: 99px;
-  max-height: 99px;
-  overflow: auto;
-  white-space: pre-line;
-  padding: 5px 5px 2px 5px;
-}
-#main-box #game-info #game-info-tab-box #options-tab-info form {
-  display: grid;
-  grid-template-columns: 150px 150px;
-  grid-template-rows: 30px 30px 30px;
-  margin-left: 10px;
-  margin-right: 10px;
-  grid-column-gap: 80px;
-}
-#main-box #game-info #game-info-tab-box p {
-  margin-top: 0px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+    width: 310px;
+    height: 310px;
+    border: 2px solid black;
+    border-radius: 5px;
+    z-index: 0;
+
+    #game-info{
+        position: relative;
+        top: 295px;
+        text-align: center;
+        
+        h2{
+            margin-bottom: 2px;
+        }
+        
+        #start-button {
+            height: 35px;
+            width: 150px;
+            font-size: 20px;
+            border-radius: 10px;
+            background: rgba(133,133,0,0.5);
+        }
+        
+        #game-info-tabs{
+            margin-top: 5px;
+            button{
+                width: 33%;
+                margin: 0;
+                font-size: 18px;
+                background-color: lightgray;
+            }
+        }
+        #game-info-tab-box{
+            width: 400px;
+            border: 1px solid black;
+            background-color: rgba(255,255,255,0.3);
+            height: 99px;
+            max-height: 99px;
+            overflow: auto;
+            white-space: pre-line;
+            padding: 5px 5px 2px 5px;
+            
+            #options-tab-info form{
+              display: grid;
+              grid-template-columns: 150px 150px;
+              grid-template-rows: 30px 30px 30px 30px;
+              margin: 0 10px 10px 10px;
+              grid-column-gap: 65px
+            }
+            
+            
+                p{margin-top: 0px;}
+            
+        }
+    }
 }
 
 .circle {
-  position: absolute;
-  border-radius: 20px;
-  width: 20px;
-  height: 20px;
-  margin: 0px;
-  background-color: black;
+    position: absolute;
+    border-radius: 20px;
+    width: 20px;
+    height: 20px;
+    margin: 0px;
+    background-color: black;
 }
 
 .card {
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  border: 1px solid black;
-  border-radius: 10px;
-  width: 100px;
-  height: 100px;
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-  transition: background-color 0.5s, top 0.5s, left 0.5s;
-}
-.card .number-box {
-  height: 80%;
-  line-height: 1.6;
-}
-.card .number-box span {
-  display: inline-block;
-  width: 50%;
-}
-.card .name-row {
-  height: 20%;
-}
-.card .name-row span {
-  vertical-align: middle;
-}
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 100px;
+    height: 100px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    transition: background-color 0.5s, top 0.5s, left 0.5s;
 
+    .number-box {
+        height: 80%;
+        line-height: 1.6;
+        span {
+            display: inline-block;
+            width: 50%;
+        }
+    }
+    .name-row {
+        height: 20%;
+        span{
+            vertical-align: middle;
+        }
+    }
+}
 .card:hover {
-  cursor: grab;
+    cursor: grab;
 }
 
 .grabbing {
-  box-shadow: 2px 2px 2px black;
-  transition: top 0s, left 0s;
+    box-shadow: 2px 2px 2px black;
+    transition: top 0s, left 0s;
 }
 
 .hand-area {
-  position: relative;
-  border: 2px solid black;
-  width: 110px;
-  height: 315px;
-}
-@media (min-width: 600px) {
-  .hand-area {
-    margin-left: 50px;
-    margin-right: 50px;
-  }
+    position: relative;
+    border: 2px solid black;
+    width: 110px;
+    height: 315px;
+    @media (min-width: 600px) {   
+        margin-left: 50px;
+        margin-right: 50px;
+    }
 }
 
 .info-hide {
-  display: none;
+    display: none;
 }
 
 .popup-text {
-  position: absolute;
-  color: red;
-  font-weight: bold;
-  font-size: 36px;
-  font-family: 'Romanesco', cursive;
-  border-radius: 10px;
-  z-index: 100;
-  background-color: rgba(255, 255, 255, 0.6);
-  opacity: 0.5;
-  left: -25px;
-  transition: left 0.2s, opacity 0.2s;
+    position: absolute;
+    color: red;
+    font-weight: bold;
+    font-size: 36px;
+    font-family: 'Romanesco', cursive;
+    border-radius: 10px;
+    z-index: 100;
+    background-color: rgba(255,255,255,0.6);
+    opacity: 0.5;
+    left: -25px;
+    transition: left 0.2s, opacity 0.2s;
 }
 
 .fade-in {
-  opacity: 1;
-  left: 25px;
+    opacity: 1;
+    left: 25px;
 }
 
 .fade-out {
-  opacity: 0;
-  left: 75px;
+    opacity: 0;
+    left: 75px;
 }
