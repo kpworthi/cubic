@@ -21,9 +21,10 @@ Current implementation includes only a completely random AI: random card choice,
 - add victory condition
 - added imports for constants and the custom card element
 - options like shuffle, reset deck, sound on/off
+- add ai
 
 **To-Do**
-1. add ai
 2. disable options while game is in progress
 3. touch
-4. add mp?
+4. add additional AI settings
+5. add mp?
