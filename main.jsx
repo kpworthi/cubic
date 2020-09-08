@@ -375,7 +375,7 @@ class Main extends React.Component{
                     turn: (this.state.turn==="red")?"blue":"red"
                 },()=>{
                         //run AI if needed
-                        if(this.state.turn==="red" && this.state.aiType !== "none")
+                        if(this.state.turn==="red" && document.querySelector("#ai-button").textContent === `"Random" AI`)
                             setTimeout(()=>{this.aiPlayer()}, 900);
                     });
             }, 500);
@@ -425,7 +425,9 @@ class Main extends React.Component{
         this.setState({
             dealt: true,
             turn: Math.round(Math.random())===0?"blue":"red"
-        });
+        },()=>{if (this.state.turn === "red" && document.querySelector("#ai-button").textContent === `"Random" AI`) 
+                    setTimeout(()=>{this.aiPlayer()},500);
+                });
       }
       else{
           for(let each of document.querySelectorAll(".card")){
@@ -523,6 +525,10 @@ Chain: If an opposing card is flipped as the result of a 'match' or 'sum', that 
         event.currentTarget.textContent = event.currentTarget.textContent==="Low Level Deck"?"Mid Level Deck":"Low Level Deck";
     }
 
+    aiClick(event){
+        event.currentTarget.textContent = event.currentTarget.textContent==="No AI"?'"Random" AI':"No AI";
+    }
+
     tabClick(event){
         console.log(event.currentTarget.id);
         if(event.currentTarget.id !== this.tab){
@@ -570,6 +576,7 @@ Chain: If an opposing card is flipped as the result of a 'match' or 'sum', that 
                         <label>Sound<input type="checkbox" name="sound-check" id="sound-check"/></label>
                         <button type="button" name="swap" id="swap-deck-button" onClick={this.swapClick}>Low Level Deck</button>
                         <button type="button" name="shuffle" id="shuffle-deck-button" onClick={this.shuffleClick}>Deck Unshuffled</button>
+                        <button type="button" name="ai" id="ai-button" onClick={this.aiClick}>No AI</button>
                       </form>
                     </div>
                 </div>
@@ -628,8 +635,8 @@ to do:
 --add victory condition--
 --added imports for constants and the custom card element--
 --options like shuffle, reset deck, sound on/off--
+--add ai--
 
---add ai
 --disable options while game is in progress
 --touch
 --add mp?
