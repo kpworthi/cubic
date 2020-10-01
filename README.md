@@ -4,6 +4,8 @@
 
 Originally a project to test out ways of implementing click-and-drag and snap-to-grid in JavaScript, now a semi-labor-of-love.
 
+Live implementation available at [codepen](https://codepen.io/kpWorthi/full/gOrwYyx)
+
 **Code Changes**
 To accomodate the addition of adding an AI player, the 'place card' method was added to the main component
 - This method contains the actions performed after a valid move was confirmed
